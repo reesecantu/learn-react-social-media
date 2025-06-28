@@ -114,7 +114,7 @@ export const CreatePost = () => {
           id="image"
           accept="image/*"
           onChange={handleFileChange}
-          className="w-full text-gray-200"
+          className="w-full text-gray-200 border border-white/20 bg-transparent p-1 rounded file:mr-2 file:text-sm file:py-1 file:px-2 file:rounded file:border-0 file:bg-gray-100 file:text-black hover:file:bg-gray-300"
         />
       </div>
       <button
