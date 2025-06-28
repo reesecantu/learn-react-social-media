@@ -8,7 +8,16 @@ interface PostInput {
 }
 
 const createPost = async (post: PostInput, imageFile: File) => {
-  const filePath = `${post.title}-${Date.now}-${imageFile.name}`;
+  // Clean the filename to remove invalid characters
+  const cleanFileName = imageFile.name
+    .replace(/[^a-zA-Z0-9.-]/g, "_") // Replace invalid chars with underscore
+    .toLowerCase();
+
+  const cleanTitle = post.title
+    .replace(/[^a-zA-Z0-9]/g, "_") // Replace spaces and special chars
+    .toLowerCase();
+
+  const filePath = `${cleanTitle}-${Date.now()}-${cleanFileName}`;
 
   const { error: uploadError } = await supabase.storage
     .from("post-images")
@@ -41,13 +50,25 @@ export const CreatePost = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (!selectedFile) return;
-    mutate({
-      post: {
-        title,
-        content,
+    mutate(
+      {
+        post: {
+          title,
+          content,
+        },
+        imageFile: selectedFile,
       },
-      imageFile: selectedFile,
-    });
+      {
+        onSuccess: () => {
+          setTitle("");
+          setContent("");
+          setSelectedFile(null);
+
+          const fileInput = document.getElementById("image") as HTMLInputElement | null;
+          if (fileInput) fileInput.value = "";
+        },
+      }
+    );
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,40 +78,51 @@ export const CreatePost = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {" "}
+    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
       <div>
-        {" "}
-        <label>Title</label>
+        <label htmlFor="title" className="block mb-2 font-medium">
+          Title
+        </label>
         <input
           type="text"
           id="title"
+          value={title}
           required
           onChange={(e) => setTitle(e.target.value)}
+          className="w-full border border-white/20 bg-transparent p-2 rounded"
         />
       </div>
       <div>
-        {" "}
-        <label>Content</label>
+        <label htmlFor="content" className="block mb-2 font-medium">
+          Content
+        </label>
         <textarea
           id="content"
+          value={content}
           required
           rows={5}
           onChange={(e) => setContent(e.target.value)}
+          className="w-full text-gray-200 border border-white/20 bg-transparent p-2 rounded"
         />
       </div>
       <div>
-        {" "}
-        <label>Upload Image</label>
+        <label htmlFor="image" className="block mb-2 font-medium">
+          Upload Image
+        </label>
         <input
-          id="image_url"
           type="file"
+          id="image"
           accept="image/*"
-          required
           onChange={handleFileChange}
+          className="w-full text-gray-200"
         />
       </div>
-      <button type="submit">Create Post</button>
+      <button
+        type="submit"
+        className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer"
+      >
+        Create Post
+      </button>
     </form>
   );
 };
