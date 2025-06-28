@@ -1,20 +1,16 @@
 import { useState, type ChangeEvent } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "../../supabase/supabase-client";
-import type { Database } from "../../supabase/database.types";
-
-// Use the generated types instead of custom interface
-type Post = Database["public"]["Tables"]["posts"]["Row"];
-type PostInsert = Database["public"]["Tables"]["posts"]["Insert"];
+import type { Post, PostInsert } from "../types";
 
 const createPost = async (post: Omit<PostInsert, 'image_url'>, imageFile: File): Promise<Post[]> => {
-  // Clean the filename to remove invalid characters
+  // Clean the filename to replace invalid characters with _
   const cleanFileName = imageFile.name
-    .replace(/[^a-zA-Z0-9.-]/g, "_") //replace special characters with underscore
+    .replace(/[^a-zA-Z0-9.-]/g, "_")
     .toLowerCase();
 
   const cleanTitle = post.title
-    .replace(/[^a-zA-Z0-9]/g, "_") //replace special characters with underscore
+    .replace(/[^a-zA-Z0-9]/g, "_")
     .toLowerCase();
 
   const filePath = `${cleanTitle}-${Date.now()}-${cleanFileName}`;
@@ -30,7 +26,7 @@ const createPost = async (post: Omit<PostInsert, 'image_url'>, imageFile: File):
     .from("post-images")
     .getPublicUrl(filePath);
 
-  // Insert post with proper typing
+  // Insert post
   const { data, error } = await supabase
     .from("posts")
     .insert([{ 
