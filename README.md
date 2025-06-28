@@ -1,69 +1,37 @@
-# React + TypeScript + Vite
+# learn-react SM
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
+<!-- Briefly describe the project and its purpose. Mention that it's based on a tutorial and how you are personalizing it. -->
 
-Currently, two official plugins are available:
+## Features / Learning Objectives
+- <!-- List key features you are building -->
+- <!-- Highlight what you aim to learn or improve -->
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### How I made it my own
+- Tweaks to styling
+- Different OAuth provider
+- Bug fixes 
+    - like removing invalid characters from post titles and filenames before moving them into storage
+- <!-- I want to test this -->
 
-## Expanding the ESLint configuration
+## Tech Stack
+- <!-- List main technologies, frameworks, and libraries used -->
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Next Steps
+- <!-- Reflect on what you learned from this project -->
+- <!-- Note what you would do differently or improve in your next project -->
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
+<!-- (Optional) Basic setup instructions for running the project -->
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Credits
+<!-- (Optional) Link to the original tutorial or resources you followed -->
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Process
+- setup file structure
+- basic routing
+- navbar layout for desktop and mobile
+- Auth Context
+- Post creation form
