@@ -1,38 +1,45 @@
 import { useState, type ChangeEvent } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "../../supabase/supabase-client";
+import type { Database } from "../../supabase/database.types";
 
-interface PostInput {
-  title: string;
-  content: string;
-}
+// Use the generated types instead of custom interface
+type Post = Database["public"]["Tables"]["posts"]["Row"];
+type PostInsert = Database["public"]["Tables"]["posts"]["Insert"];
 
-const createPost = async (post: PostInput, imageFile: File) => {
+const createPost = async (post: Omit<PostInsert, 'image_url'>, imageFile: File): Promise<Post[]> => {
   // Clean the filename to remove invalid characters
   const cleanFileName = imageFile.name
-    .replace(/[^a-zA-Z0-9.-]/g, "_") // Replace invalid chars with underscore
+    .replace(/[^a-zA-Z0-9.-]/g, "_") //replace special characters with underscore
     .toLowerCase();
 
   const cleanTitle = post.title
-    .replace(/[^a-zA-Z0-9]/g, "_") // Replace spaces and special chars
+    .replace(/[^a-zA-Z0-9]/g, "_") //replace special characters with underscore
     .toLowerCase();
 
   const filePath = `${cleanTitle}-${Date.now()}-${cleanFileName}`;
 
+  // Upload image
   const { error: uploadError } = await supabase.storage
     .from("post-images")
     .upload(filePath, imageFile);
   if (uploadError) throw new Error(uploadError.message);
 
+  // Get public URL
   const { data: publicUrlData } = supabase.storage
     .from("post-images")
     .getPublicUrl(filePath);
 
+  // Insert post with proper typing
   const { data, error } = await supabase
     .from("posts")
-    .insert([{ ...post, image_url: publicUrlData.publicUrl }]);
-  if (error) throw new Error(error.message);
+    .insert([{ 
+      ...post, 
+      image_url: publicUrlData.publicUrl 
+    }])
+    .select();
 
+  if (error) throw new Error(error.message);
   return data;
 };
 
@@ -42,7 +49,7 @@ export const CreatePost = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const { mutate, isPending, isError } = useMutation({
-    mutationFn: (data: { post: PostInput; imageFile: File }) => {
+    mutationFn: (data: { post: Omit<PostInsert, 'image_url'>; imageFile: File }) => {
       return createPost(data.post, data.imageFile);
     },
   });
