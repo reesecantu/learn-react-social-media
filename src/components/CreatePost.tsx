@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { supabase } from "../supabase-client";
+import { supabase } from "../../supabase/supabase-client";
 
 interface PostInput {
   title: string;
@@ -64,7 +64,9 @@ export const CreatePost = () => {
           setContent("");
           setSelectedFile(null);
 
-          const fileInput = document.getElementById("image") as HTMLInputElement | null;
+          const fileInput = document.getElementById(
+            "image"
+          ) as HTMLInputElement | null;
           if (fileInput) fileInput.value = "";
         },
       }
@@ -124,7 +126,7 @@ export const CreatePost = () => {
         {isPending ? "Creating..." : "Create Post"}
       </button>
 
-      { isError && <p className="text-red-500">Error creating post.</p>}
+      {isError && <p className="text-red-500">Error creating post.</p>}
     </form>
   );
 };

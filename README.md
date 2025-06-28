@@ -33,5 +33,7 @@
 - setup file structure
 - basic routing
 - navbar layout for desktop and mobile
+- Link Supabase
 - Auth Context
-- Post creation form
+- Basic Post creation form (title, content, photo)
+  - Supabase RLS
