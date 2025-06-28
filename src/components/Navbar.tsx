@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
 export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { signInWithGoogle, signOut, user } = useAuth();
+
+  const displayName = user?.user_metadata?.name || user?.email;
   return (
     <nav className="fixed top-0 w-full z-40 bg-[rgba(10,10,10,0.8)] backdrop-blur-lg border-b border-white/10 shadow-lg">
       <div className="max-w-5xl mx-auto px-4">
@@ -39,6 +43,30 @@ export const Navbar = () => {
             </Link>
           </div>
 
+          {/* Desktop Auth */}
+          <div>
+            {user ? (
+                <div className="flex items-center space-x-3">
+                {user.user_metadata?.avatar_url && (
+                  <img
+                  src={user.user_metadata.avatar_url}
+
+                  className="w-8 h-8 rounded-full object-cover"
+                  />
+                )}
+                <span className="text-gray-300">{displayName}</span>
+                <button
+                  onClick={signOut}
+                  className="ml-2 px-3 py-1 rounded bg-red-600 text-white hover:bg-red-400 transition"
+                >
+                  Sign Out
+                </button>
+                </div>
+            ) : (
+              <button onClick={signInWithGoogle}>Sign in with Google</button>
+            )}
+          </div>
+
           {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
@@ -71,39 +99,43 @@ export const Navbar = () => {
               </svg>
             </button>
           </div>
-
-          {/* Mobile Menu */}
-          {menuOpen && (
-            <div className="md:hidden bg-[rgba(10,10,10,0.9)]">
-              <div className="px-2 pt-2 pb-3 space-y-1">
-                <Link
-                  to="/"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
-                >
-                  Home
-                </Link>
-                <Link
-                  to="/create"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
-                >
-                  Create Post
-                </Link>
-                <Link
-                  to="/communities"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
-                >
-                  Communities
-                </Link>
-                <Link
-                  to="/community/create"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
-                >
-                  Create Community
-                </Link>
-              </div>
-            </div>
-          )}
         </div>
+
+        {/* Mobile Menu */}
+        {menuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-[rgba(10,10,10,0.95)] border-b border-white/10">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              <Link
+                to="/"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+                onClick={() => setMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                to="/create"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+                onClick={() => setMenuOpen(false)}
+              >
+                Create Post
+              </Link>
+              <Link
+                to="/communities"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+                onClick={() => setMenuOpen(false)}
+              >
+                Communities
+              </Link>
+              <Link
+                to="/community/create"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+                onClick={() => setMenuOpen(false)}
+              >
+                Create Community
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
