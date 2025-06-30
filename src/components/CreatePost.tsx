@@ -1,8 +1,9 @@
 import { useState, type ChangeEvent } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { supabase } from "../../supabase/supabase-client";
-import type { Post, PostInsert } from "../types";
+import type { Community, Post, PostInsert } from "../types";
 import { useAuth } from "../context/AuthContext";
+import { fetchCommunities } from "../api/communities";
 
 const createPost = async (
   post: Omit<PostInsert, "image_url">,
@@ -35,12 +36,13 @@ const createPost = async (
       {
         ...post,
         image_url: publicUrlData.publicUrl,
-        avatar_url: post.avatar_url, 
+        avatar_url: post.avatar_url,
       },
     ])
     .select();
 
   if (error) throw new Error(error.message);
+
   return data;
 };
 
@@ -48,8 +50,14 @@ export const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [communityId, setCommunityId] = useState<number | null>(null);
 
   const { user } = useAuth();
+
+  const { data: communities } = useQuery<Community[], Error>({
+    queryKey: ["communities"],
+    queryFn: fetchCommunities,
+  });
 
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (data: {
@@ -68,7 +76,8 @@ export const CreatePost = () => {
         post: {
           title,
           content,
-          avatar_url: user?.user_metadata.avatar_url || null
+          avatar_url: user?.user_metadata.avatar_url || null,
+          community_id: communityId,
         },
         imageFile: selectedFile,
       },
@@ -87,6 +96,12 @@ export const CreatePost = () => {
     );
   };
 
+  const handleCommunityChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+
+    setCommunityId(value ? Number(value) : null);
+  };
+
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
@@ -95,6 +110,7 @@ export const CreatePost = () => {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
+      {/* POST TITLE */}
       <div>
         <label htmlFor="title" className="block mb-2 font-medium">
           Title
@@ -112,6 +128,7 @@ export const CreatePost = () => {
           {title.length}/50
         </div>
       </div>
+      {/* POST CONTENT */}
       <div>
         <label htmlFor="content" className="block mb-2 font-medium">
           Content
@@ -125,6 +142,34 @@ export const CreatePost = () => {
           className="w-full text-gray-200 border border-white/20 bg-transparent p-2 rounded"
         />
       </div>
+      {/* SELECT COMMUNITY */}
+      <div>
+        <label htmlFor="community" className="block mb-2 font-medium">
+          {" "}
+          Select Community{" "}
+        </label>
+        <select
+          id="community"
+          onChange={handleCommunityChange}
+          className="w-full border border-white/20 bg-transparent text-gray-200 p-2 rounded appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value={""} className="bg-gray-800 text-gray-200">
+            {" "}
+            -- Choose a Community --{" "}
+          </option>
+          {communities?.map((community, key) => (
+            <option
+              key={key}
+              value={community.id}
+              className="bg-gray-800 text-gray-200"
+            >
+              {community.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* UPLOAD IMAGE */}
       <div>
         <label htmlFor="image" className="block mb-2 font-medium">
           Upload Image
