@@ -1,31 +1,37 @@
 # learn-react SM
 
 ## Description
-<!-- Briefly describe the project and its purpose. Mention that it's based on a tutorial and how you are personalizing it. -->
+
 
 ## Features / Learning Objectives
-- <!-- List key features you are building -->
-- <!-- Highlight what you aim to learn or improve -->
+<!-- Features -->
+- 
+
+<!-- Learning objectives -->
+- dynamic url extension generation "/posts/:id" and useParams from React Query
+- invalidate a query (overwrite vote count)
 
 ### How I made it my own
 - Tweaks to styling
 - Different OAuth provider
-- Bug fixes 
-    - like removing invalid characters from post titles and filenames before moving them into storage
-- <!-- I want to test this -->
+- Bug fixes / QOL improvements
+    - Removing invalid characters from post titles and filenames before moving them into storage
+    - Clear forms after submit 
+    - Character limit with character count on post titles
+- Increase type safety by importing types from Supabse
+
 
 ## Tech Stack
-- <!-- List main technologies, frameworks, and libraries used -->
+- Vite + React + Typescript
+- TailwindCSS
+- Supabase
+- TanStack (Formerly React Query)
 
 ## Next Steps
-- <!-- Reflect on what you learned from this project -->
-- <!-- Note what you would do differently or improve in your next project -->
-
-## Getting Started
-<!-- (Optional) Basic setup instructions for running the project -->
+- 
 
 ## Credits
-<!-- (Optional) Link to the original tutorial or resources you followed -->
+- [Demo Video on YouTube](https://youtu.be/_sSTzz13tVY?si=1n5G_N8bpPdKARWC)
 
 
 
@@ -37,3 +43,6 @@
 - Auth Context
 - Basic Post creation form (title, content, photo)
   - Supabase RLS
+- Create Post-related components
+- Add Post tiles to homepage
+- Add individual Post view

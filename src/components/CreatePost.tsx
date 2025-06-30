@@ -2,16 +2,18 @@ import { useState, type ChangeEvent } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "../../supabase/supabase-client";
 import type { Post, PostInsert } from "../types";
+import { useAuth } from "../context/AuthContext";
 
-const createPost = async (post: Omit<PostInsert, 'image_url'>, imageFile: File): Promise<Post[]> => {
+const createPost = async (
+  post: Omit<PostInsert, "image_url">,
+  imageFile: File
+): Promise<Post[]> => {
   // Clean the filename to replace invalid characters with _
   const cleanFileName = imageFile.name
     .replace(/[^a-zA-Z0-9.-]/g, "_")
     .toLowerCase();
 
-  const cleanTitle = post.title
-    .replace(/[^a-zA-Z0-9]/g, "_")
-    .toLowerCase();
+  const cleanTitle = post.title.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
 
   const filePath = `${cleanTitle}-${Date.now()}-${cleanFileName}`;
 
@@ -29,10 +31,13 @@ const createPost = async (post: Omit<PostInsert, 'image_url'>, imageFile: File):
   // Insert post
   const { data, error } = await supabase
     .from("posts")
-    .insert([{ 
-      ...post, 
-      image_url: publicUrlData.publicUrl 
-    }])
+    .insert([
+      {
+        ...post,
+        image_url: publicUrlData.publicUrl,
+        avatar_url: post.avatar_url, 
+      },
+    ])
     .select();
 
   if (error) throw new Error(error.message);
@@ -44,8 +49,13 @@ export const CreatePost = () => {
   const [content, setContent] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
+  const { user } = useAuth();
+
   const { mutate, isPending, isError } = useMutation({
-    mutationFn: (data: { post: Omit<PostInsert, 'image_url'>; imageFile: File }) => {
+    mutationFn: (data: {
+      post: Omit<PostInsert, "image_url">;
+      imageFile: File;
+    }) => {
       return createPost(data.post, data.imageFile);
     },
   });
@@ -58,6 +68,7 @@ export const CreatePost = () => {
         post: {
           title,
           content,
+          avatar_url: user?.user_metadata.avatar_url || null
         },
         imageFile: selectedFile,
       },
@@ -93,9 +104,13 @@ export const CreatePost = () => {
           id="title"
           value={title}
           required
+          maxLength={50}
           onChange={(e) => setTitle(e.target.value)}
           className="w-full border border-white/20 bg-transparent p-2 rounded"
         />
+        <div className="text-right text-xs text-gray-400 mt-1">
+          {title.length}/50
+        </div>
       </div>
       <div>
         <label htmlFor="content" className="block mb-2 font-medium">

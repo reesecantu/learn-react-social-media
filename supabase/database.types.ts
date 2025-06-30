@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       posts: {
         Row: {
+          avatar_url: string
           content: string
           created_at: string
           id: number
@@ -18,6 +19,7 @@ export type Database = {
           title: string
         }
         Insert: {
+          avatar_url: string
           content: string
           created_at?: string
           id?: number
@@ -25,6 +27,7 @@ export type Database = {
           title: string
         }
         Update: {
+          avatar_url?: string
           content?: string
           created_at?: string
           id?: number
@@ -32,6 +35,38 @@ export type Database = {
           title?: string
         }
         Relationships: []
+      }
+      votes: {
+        Row: {
+          created_at: string
+          id: number
+          post_id: number
+          user_id: string
+          vote: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          post_id: number
+          user_id: string
+          vote: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          post_id?: number
+          user_id?: string
+          vote?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "votes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
