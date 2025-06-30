@@ -28,18 +28,23 @@ const createReply = async (
     author: author,
   });
 
-if (error) {
+  if (error) {
     throw new Error("Failed to create reply: " + error.message);
-}
+  }
 };
+
+//////////////////////////////////////
+/////////// MAIN COMPONENT ///////////
+//////////////////////////////////////
 
 export const CommentItem = ({ comment, postId }: CommentItemProps) => {
   const [showReply, setShowReply] = useState<boolean>(false);
   const [replyText, setReplyText] = useState<string>("");
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
   const { user } = useAuth();
 
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (replyContent: string) => {
@@ -54,7 +59,7 @@ export const CommentItem = ({ comment, postId }: CommentItemProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [] });
       setReplyText("");
-      setShowReply(false)
+      setShowReply(false);
     },
   });
 
@@ -77,7 +82,10 @@ export const CommentItem = ({ comment, postId }: CommentItemProps) => {
           </span>
         </div>
         <p className="text-gray-300">{comment.content}</p>
-        <button onClick={() => setShowReply((prev) => !prev)}>
+        <button
+          onClick={() => setShowReply((prev) => !prev)}
+          className="text-blue-500 text-sm mt-1"
+        >
           {" "}
           {showReply ? "Cancel" : "Reply"}{" "}
         </button>
@@ -103,6 +111,35 @@ export const CommentItem = ({ comment, postId }: CommentItemProps) => {
           </button>
           {isError && <p className="text-red-500 mt-2">Error posting reply</p>}
         </form>
+      )}
+
+      {comment.children && comment.children.length > 0 && (
+        <>
+          <button
+            onClick={() => setIsCollapsed((prev) => !prev)}
+            className="flex items-center"
+            aria-label={isCollapsed ? "Show Replies" : "Hide Replies"}
+          >
+            {isCollapsed ? (
+              // Down arrow SVG
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M5 8l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            ) : (
+              // Up arrow SVG
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M5 12l5-5 5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )}
+          </button>
+          {!isCollapsed && (
+              <div>
+                  {comment.children?.map((child, key) => (
+                      <CommentItem key={key} comment={child} postId={postId} />
+                  ))}
+              </div>
+          )}
+        </>
       )}
     </div>
   );

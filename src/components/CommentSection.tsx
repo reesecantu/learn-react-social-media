@@ -62,22 +62,21 @@ export const CommentSection = ({ postId }: CommentSectionProps) => {
       return createComment(newComment, user?.id, user?.user_metadata.name);
     },
     onSuccess: () => {
-        queryClient.invalidateQueries({queryKey: []})
+        queryClient.invalidateQueries({queryKey: ["comments", postId]})
+        setNewCommentText("");
     }
   });
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!newCommentText) return;
+    if (!newCommentText.trim()) return;
 
     mutate({
       content: newCommentText,
       parent_comment_id: null,
       post_id: postId,
     });
-
-    setNewCommentText("");
   };
 
 
