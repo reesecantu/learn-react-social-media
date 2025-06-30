@@ -54,9 +54,34 @@ export type Database = {
           },
         ]
       }
+      communities: {
+        Row: {
+          created_at: string
+          description: string
+          id: number
+          name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: number
+          name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: number
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       posts: {
         Row: {
           avatar_url: string
+          community_id: number | null
           content: string
           created_at: string
           id: number
@@ -65,6 +90,7 @@ export type Database = {
         }
         Insert: {
           avatar_url: string
+          community_id?: number | null
           content: string
           created_at?: string
           id?: number
@@ -73,13 +99,22 @@ export type Database = {
         }
         Update: {
           avatar_url?: string
+          community_id?: number | null
           content?: string
           created_at?: string
           id?: number
           image_url?: string
           title?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "posts_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       votes: {
         Row: {
@@ -118,7 +153,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_posts_with_counts: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: number
+          title: string
+          content: string
+          created_at: string
+          image_url: string
+          avatar_url: string
+          like_count: number
+          comment_count: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

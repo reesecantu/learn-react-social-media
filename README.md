@@ -12,6 +12,9 @@
 
 - dynamic url extension generation "/posts/:id" and useParams from React Query
 - invalidate a query (overwrite vote count)
+- RPC with supabase
+- iterative design approach
+  - Create new tables as need, only create the minimum viable structure necessary to complete your current task
 
 ### How I made it my own
 
@@ -21,6 +24,7 @@
   - Removing invalid characters from post titles and filenames before moving them into storage
   - Clear forms after submit
   - Character limit with character count on post titles
+  - Show vote sum not vote count (dislikes count as negative towards vote count)
 - server-side validation
   - like/dislikes only sway count by one
   - posts are uploaded with images
