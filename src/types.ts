@@ -5,6 +5,7 @@ export type PostInsert = Database["public"]["Tables"]["posts"]["Insert"];
 
 // RPC function return types
 export type PostWithCounts = Database["public"]["Functions"]["get_posts_with_counts"]["Returns"][0];
+export type PostWithCommunityAndCounts = Database["public"]["Functions"]["get_community_posts_with_counts"]["Returns"][0];
 
 export type Vote = Database["public"]["Tables"]["votes"]["Row"];
 

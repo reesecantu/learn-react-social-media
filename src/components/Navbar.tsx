@@ -57,13 +57,13 @@ export const Navbar = () => {
                 <span className="text-gray-300">{displayName}</span>
                 <button
                   onClick={signOut}
-                  className="ml-2 px-3 py-1 rounded bg-red-600 text-white hover:bg-red-400 transition"
+                  className="ml-2 px-3 py-1 rounded bg-red-600 text-white hover:cursor-pointer hover:bg-red-400 transition"
                 >
                   Sign Out
                 </button>
                 </div>
             ) : (
-              <button onClick={signInWithGoogle}>Sign in with Google</button>
+              <button onClick={signInWithGoogle} className="hover:cursor-pointer">Sign in with Google</button>
             )}
           </div>
 

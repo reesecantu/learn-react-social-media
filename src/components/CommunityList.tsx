@@ -29,7 +29,7 @@ export const CommunityList = () => {
           className="border border-white/20 p-4 rounded hover:-translate-y-1 transition transform"
         >
           <Link
-            to="/community/"
+            to={`/community/${community.name}`}
             className="text-2xl font-bold text-blue-500 hover:underline"
           >
             {" "}

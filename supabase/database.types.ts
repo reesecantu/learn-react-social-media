@@ -153,6 +153,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_community_posts_with_counts: {
+        Args: { community_name_param: string }
+        Returns: {
+          id: number
+          title: string
+          content: string
+          created_at: string
+          image_url: string
+          avatar_url: string
+          community_id: number
+          like_count: number
+          comment_count: number
+          community_name: string
+        }[]
+      }
       get_posts_with_counts: {
         Args: Record<PropertyKey, never>
         Returns: {

@@ -25,6 +25,7 @@
   - Clear forms after submit
   - Character limit with character count on post titles
   - Show vote sum not vote count (dislikes count as negative towards vote count)
+  - Remeber to fetch vote count and comment count when viewing a post inside a community
 - server-side validation
   - like/dislikes only sway count by one
   - posts are uploaded with images
@@ -39,7 +40,12 @@
 
 ## Next Steps
 
--
+- profiles
+- multiple login options
+- MD capabilities for captions/comments
+- private messaging
+- one row of posts that grow/shrink to fit the image size
+- clean, searchable, dropdown menu for "select community"
 
 ## Credits
 

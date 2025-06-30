@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import type { InsertCommunity } from "../types";
 import { useAuth } from "../context/AuthContext";
@@ -21,6 +21,17 @@ const createCommunity = async (community: Omit<InsertCommunity, "user_id">, user
     if (error) throw new Error(error.message);
 }
 
+const checkCommunityExists = async (name: string) => {
+  const { data, error } = await supabase
+    .from("communities")
+    .select("id")
+    .eq("name", name)
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data !== null;
+}
+
 
 export const CreateCommunity = () => {
   const [name, setName] = useState("");
@@ -29,6 +40,14 @@ export const CreateCommunity = () => {
 
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  // Check community existence with React Query
+  const { data: communityExists } = useQuery({
+    queryKey: ["checkCommunity", name],
+    queryFn: () => checkCommunityExists(name),
+    enabled: name.length >= 3, // Only run query when name is long enough
+    staleTime: 30000, // Cache for 30 seconds
+  });
 
   // Validate community name
   const validateName = (value: string) => {
@@ -45,6 +64,11 @@ export const CreateCommunity = () => {
       setNameError("Community name must be 40 characters or less");
       return false;
     }
+    if (communityExists) {
+      setNameError("A community with this name already exists");
+      return false;
+    }
+
     setNameError("");
     return true;
   };
