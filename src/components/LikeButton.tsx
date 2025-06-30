@@ -94,7 +94,7 @@ export const LikeButton = ({ postId }: LikeButtonProps) => {
   return (
     <div className="flex items-center space-x-2 my-4">
       <button
-        className={`p-2 rounded-full transition-colors ${
+        className={`p-1 pr-0 rounded-full transition-colors ${
           userVote === 1
             ? "text-green-500 hover:text-green-400"
             : "text-gray-400 hover:text-gray-300 "
@@ -114,7 +114,7 @@ export const LikeButton = ({ postId }: LikeButtonProps) => {
         </svg>
       </button>
       <button
-        className={`p-2 rounded-full transition-colors ${
+        className={`p-1 rounded-full transition-colors ${
           userVote === -1
             ? "text-red-500 hover:text-red-400"
             : "text-gray-400 hover:text-gray-300"
