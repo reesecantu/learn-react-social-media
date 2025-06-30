@@ -9,6 +9,51 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      comments: {
+        Row: {
+          author: string | null
+          content: string
+          created_at: string
+          id: number
+          parent_comment_id: number | null
+          post_id: number
+          user_id: string
+        }
+        Insert: {
+          author?: string | null
+          content: string
+          created_at?: string
+          id?: number
+          parent_comment_id?: number | null
+          post_id: number
+          user_id: string
+        }
+        Update: {
+          author?: string | null
+          content?: string
+          created_at?: string
+          id?: number
+          parent_comment_id?: number | null
+          post_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       posts: {
         Row: {
           avatar_url: string
