@@ -44,14 +44,14 @@ export const Navbar = () => {
           </div>
 
           {/* Desktop Auth */}
-          <div>
+          <div className="hidden md:block">
             {user ? (
-                <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3">
                 {user.user_metadata?.avatar_url && (
                   <img
-                  src={user.user_metadata.avatar_url}
-
-                  className="w-8 h-8 rounded-full object-cover"
+                    src={user.user_metadata.avatar_url}
+                    alt="User avatar"
+                    className="w-8 h-8 rounded-full object-cover"
                   />
                 )}
                 <span className="text-gray-300">{displayName}</span>
@@ -61,9 +61,14 @@ export const Navbar = () => {
                 >
                   Sign Out
                 </button>
-                </div>
+              </div>
             ) : (
-              <button onClick={signInWithGoogle} className="hover:cursor-pointer">Sign in with Google</button>
+              <button
+                onClick={signInWithGoogle}
+                className="hover:cursor-pointer"
+              >
+                Sign in with Google
+              </button>
             )}
           </div>
 
@@ -133,6 +138,43 @@ export const Navbar = () => {
               >
                 Create Community
               </Link>
+
+              {/* Mobile Auth Section */}
+              <div className="border-t border-white/10 pt-2 mt-2">
+                {user ? (
+                  <div className="px-3 py-2">
+                    <div className="flex items-center space-x-3 mb-2">
+                      {user.user_metadata?.avatar_url && (
+                        <img
+                          src={user.user_metadata.avatar_url}
+                          alt="User avatar"
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      )}
+                      <span className="text-gray-300">{displayName}</span>
+                    </div>
+                    <button
+                      onClick={() => {
+                        signOut();
+                        setMenuOpen(false);
+                      }}
+                      className="w-full px-3 py-2 rounded bg-red-600 text-white hover:bg-red-400 transition text-left"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      signInWithGoogle();
+                      setMenuOpen(false);
+                    }}
+                    className="block w-full px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 text-left"
+                  >
+                    Sign in with Google
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         )}
