@@ -45,7 +45,7 @@ export const CommunityDisplay = ({ communityName }: CommunityDisplayProps) => {
   }
   return (
     <div>
-      <h2 className="text-6xl font-bold mb-5 pb-2 text-center bg-gradient-to-r from-blue-500 from-30% to-green-500 bg-clip-text text-transparent">
+      <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-5 pb-2 text-center bg-gradient-to-r from-blue-500 from-30% to-green-500 bg-clip-text text-transparent">
         {communityName}
       </h2>
       {data && data.length > 0 ? (
