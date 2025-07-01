@@ -16,7 +16,7 @@ export const CommunityPage = () => {
   if (!name) return null;
 
   return (
-    <div className="pt-20">
+    <div className="pt-10 md:pt-20">
       <CommunityDisplay communityName={name} />
     </div>
   );
