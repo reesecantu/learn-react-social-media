@@ -2,50 +2,57 @@
 
 ## Description
 
+A modern social media web application built with React, Vite, and Supabase. This project demonstrates full-stack development concepts, including authentication, real-time data, and iterative design. The app allows users to create posts with images, interact through likes/dislikes and comments, and join communities.
+
 ## Features / Learning Objectives
 
 <!-- Features -->
 
--
+- User authentication with OAuth providers
+- Post creation with image uploads and browsing
+- Like/dislike system with server-side validation
+- Commenting and threaded replies
+- Community creation and browsing
+- Responsive design for desktop and mobile
+- Real-time updates using Supabase subscriptions
 
 <!-- Learning objectives -->
 
-- dynamic url extension generation "/posts/:id" and useParams from React Query
-- invalidate a query (overwrite vote count)
-- RPC with supabase
-- iterative design approach
-  - Create new tables as need, only create the minimum viable structure necessary to complete your current task
+- Dynamic URL extension generation (e.g., `/posts/:id`) and use of `useParams` from React Router
+- Query invalidation to update vote counts in real time
+- Remote Procedure Calls (RPC) with Supabase
+- Iterative design: create new tables and features as needed, focusing on minimum viable structure
 
 ### How I made it my own
 
-- Tweaks to styling
-- Different OAuth provider
-- Bug fixes / QOL improvements
-  - Removing invalid characters from post titles and filenames before moving them into storage
-  - Clear forms after submit
-  - Character limit with character count on post titles
-  - Show vote sum not vote count (dislikes count as negative towards vote count)
-  - Remeber to fetch vote count and comment count when viewing a post inside a community
-- server-side validation
-  - like/dislikes only sway count by one
-  - posts are uploaded with images
-- Increase type safety by importing types from Supabse
+- Custom styling tweaks for a unique look and feel
+- Integration of a different OAuth provider for authentication
+- Bug fixes and quality-of-life improvements:
+  - Removing invalid characters from post titles and filenames before storage
+  - Clearing forms after submission
+  - Character limit and live character count on post titles
+  - Displaying vote sum (dislikes subtract from total)
+  - Fetching vote and comment counts when viewing posts in a community
+- Server-side validation:
+  - Like/dislike actions only affect count by one per user
+  - Posts require image uploads
+- Increased type safety by importing types from Supabase
 
 ## Tech Stack
 
-- Vite + React + Typescript
-- TailwindCSS
-- Supabase
-- TanStack (Formerly React Query)
+- Vite + React + TypeScript
+- TailwindCSS for styling
+- Supabase for backend, authentication, and storage
+- TanStack Query (React Query) for data fetching and caching
 
 ## Next Steps
 
-- profiles
-- multiple login options
-- MD capabilities for captions/comments
-- private messaging
-- one row of posts that grow/shrink to fit the image size
-- clean, searchable, dropdown menu for "select community"
+- Search feature for posts and communities
+- User profiles with editable information
+- Support for multiple login options
+- Markdown support for post descriptions and comments
+- Private messaging between users
+- Searchable, dropdown menu for selecting communities
 
 ## Credits
 
@@ -53,15 +60,13 @@
 
 ## Process
 
-- setup file structure
-- basic routing
-- navbar layout for desktop and mobile
-- Link Supabase
-- Auth Context
-- Basic Post creation form (title, content, photo)
-  - Supabase RLS
-- Create Post-related components
-- Add Post tiles to homepage
-- Individual Post view
-  - Like/dislike buttons
-  - Comment section
+- Set up file structure and initial project scaffolding
+- Implement basic routing with React Router
+- Design responsive navbar for desktop and mobile
+- Integrate Supabase for backend and authentication
+- Create Auth Context for managing user state
+- Build basic post creation form (title, content, photo) with Supabase RLS
+- Develop post-related components and display post tiles on homepage
+- Implement individual post view with like/dislike and comment functionality
+- Add threaded comments and replies
+- Create community pages and allow users to view all communities and posts within each community
