@@ -26,7 +26,7 @@ export const PostList = () => {
   }
 
   return (
-    <div className="flex flex-wrap gap-6 justify-center">
+    <div className="flex flex-col gap-6 max-w-2xl mx-auto">
       {data?.map((post) => (
         <PostItem key={post.id} post={post} />
       ))}

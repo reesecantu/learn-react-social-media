@@ -49,7 +49,7 @@ export const CommunityDisplay = ({ communityName }: CommunityDisplayProps) => {
         {communityName}
       </h2>
       {data && data.length > 0 ? (
-        <div>
+        <div className="flex flex-col gap-6 max-w-2xl mx-auto">
           {data.map((post, key) => (
             <PostItem key={key} post={post} />
           ))}

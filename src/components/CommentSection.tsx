@@ -62,9 +62,9 @@ export const CommentSection = ({ postId }: CommentSectionProps) => {
       return createComment(newComment, user?.id, user?.user_metadata.name);
     },
     onSuccess: () => {
-        queryClient.invalidateQueries({queryKey: ["comments", postId]})
-        setNewCommentText("");
-    }
+      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+      setNewCommentText("");
+    },
   });
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -79,13 +79,12 @@ export const CommentSection = ({ postId }: CommentSectionProps) => {
     });
   };
 
-
   const buildCommentTree = (
     flatComments: PostComment[]
   ): (PostComment & { children?: PostComment[] })[] => {
     // map from Comment ID -> comment and its children
     const map = new Map<number, PostComment & { children?: PostComment[] }>();
-    
+
     // an array of parent comments with children
     const roots: (PostComment & { children?: PostComment[] })[] = [];
 
@@ -97,14 +96,14 @@ export const CommentSection = ({ postId }: CommentSectionProps) => {
       if (comment.parent_comment_id) {
         const parent = map.get(comment.parent_comment_id);
         if (parent) {
-          // When adding a child to its parent's children array, we use map.get(comment.id) instead of pushing 
-          // the original comment object. This ensures we are pushing the enriched comment object (with its own 
-          // children property) rather than the original flat comment, preserving the nested structure as the 
+          // When adding a child to its parent's children array, we use map.get(comment.id) instead of pushing
+          // the original comment object. This ensures we are pushing the enriched comment object (with its own
+          // children property) rather than the original flat comment, preserving the nested structure as the
           // tree is built.
           parent.children!.push(map.get(comment.id)!);
         }
       } else {
-        roots.push(map.get(comment.id)!)
+        roots.push(map.get(comment.id)!);
       }
     });
     return roots;
@@ -150,7 +149,7 @@ export const CommentSection = ({ postId }: CommentSectionProps) => {
         </form>
       ) : (
         <p className="mb-4 text-gray-400">
-          must be logged in to post comments{" "}
+          You must be logged in to post comments{" "}
         </p>
       )}
 

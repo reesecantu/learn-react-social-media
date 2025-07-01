@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../../supabase/supabase-client";
 import { useAuth } from "../context/AuthContext";
 import type { Vote } from "../types";
+import { useState } from "react";
 
 interface LikeButtonProps {
   postId: number;
@@ -56,14 +57,18 @@ const fetchVotes = async (postId: number): Promise<Vote[]> => {
 ////////////////////////////////////////////////
 
 export const LikeButton = ({ postId }: LikeButtonProps) => {
+  const [showError, setShowError] = useState<boolean>(false);
   const { user } = useAuth();
 
   const queryClient = useQueryClient();
 
-  const { data: votes, error, isLoading } = useQuery({
+  const {
+    data: votes,
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ["votes", postId],
     queryFn: () => fetchVotes(postId),
-
     refetchInterval: 5000,
   });
 
@@ -73,8 +78,10 @@ export const LikeButton = ({ postId }: LikeButtonProps) => {
       return vote(voteValue, postId, user.id);
     },
     onSuccess: () => {
-      // Refetch votes from database to get updated count
       queryClient.invalidateQueries({ queryKey: ["votes", postId] });
+    },
+    onError: () => {
+      setShowError(true);
     },
   });
 
@@ -92,49 +99,58 @@ export const LikeButton = ({ postId }: LikeButtonProps) => {
   const userVote = votes?.find((v) => v.user_id === user?.id)?.vote;
 
   return (
-    <div className="flex items-center space-x-2 my-4">
-      <button
-        className={`p-1 pr-0 rounded-full transition-colors ${
-          userVote === 1
-            ? "text-green-500 hover:text-green-400"
-            : "text-gray-400 hover:text-gray-300 "
-        }`}
-        onClick={() => mutate(1)}
-      >
-        {/* thumbs up svg */}
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
+    <div className="relative">
+      {/* Error Message */}
+      {showError && (
+        <div className="p-0 bg-transparent text-gray-400">
+          You must be logged in to vote on a post
+        </div>
+      )}
+
+      <div className="flex items-center space-x-2 my-4">
+        <button
+          className={`p-1 pr-0 rounded-full transition-colors ${
+            userVote === 1
+              ? "text-green-500 hover:text-green-400"
+              : "text-gray-400 hover:text-gray-300 "
+          }`}
+          onClick={() => mutate(1)}
         >
-          <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
-        </svg>
-      </button>
-      <button
-        className={`p-1 rounded-full transition-colors ${
-          userVote === -1
-            ? "text-red-500 hover:text-red-400"
-            : "text-gray-400 hover:text-gray-300"
-        }`}
-        onClick={() => mutate(-1)}
-      >
-        {/* thumbs down svg */}
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          className="rotate-180"
+          {/* thumbs up svg */}
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+          </svg>
+        </button>
+        <button
+          className={`p-1 rounded-full transition-colors ${
+            userVote === -1
+              ? "text-red-500 hover:text-red-400"
+              : "text-gray-400 hover:text-gray-300"
+          }`}
+          onClick={() => mutate(-1)}
         >
-          <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
-        </svg>
-      </button>
-      <p className="text-gray-300">{totalVotes}</p>
+          {/* thumbs down svg */}
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="rotate-180"
+          >
+            <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+          </svg>
+        </button>
+        <p className="text-gray-300">{totalVotes}</p>
+      </div>
     </div>
   );
 };
