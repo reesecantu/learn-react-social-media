@@ -5,21 +5,21 @@ import { useAuth } from "../context/AuthContext";
 import { supabase } from "../../supabase/supabase-client";
 import { useNavigate } from "react-router";
 
-
-const createCommunity = async (community: Omit<InsertCommunity, "user_id">, userId?: string ) => {
-     if (!userId) {
+const createCommunity = async (
+  community: Omit<InsertCommunity, "user_id">,
+  userId?: string
+) => {
+  if (!userId) {
     throw new Error("You must be logged in to comment and have a username");
   }
-  const { error } = await supabase
-  .from("communities")
-  .insert({
-      name: community.name,
-      description: community.description,
-      user_id: userId,
-    });
-  
-    if (error) throw new Error(error.message);
-}
+  const { error } = await supabase.from("communities").insert({
+    name: community.name,
+    description: community.description,
+    user_id: userId,
+  });
+
+  if (error) throw new Error(error.message);
+};
 
 const checkCommunityExists = async (name: string) => {
   const { data, error } = await supabase
@@ -30,8 +30,7 @@ const checkCommunityExists = async (name: string) => {
 
   if (error) throw new Error(error.message);
   return data !== null;
-}
-
+};
 
 export const CreateCommunity = () => {
   const [name, setName] = useState("");
@@ -53,7 +52,9 @@ export const CreateCommunity = () => {
   const validateName = (value: string) => {
     const validPattern = /^[a-zA-Z0-9_]+$/; // Only letters, numbers, and underscores
     if (!validPattern.test(value)) {
-      setNameError("Community name can only contain letters, numbers, and underscores");
+      setNameError(
+        "Community name can only contain letters, numbers, and underscores"
+      );
       return false;
     }
     if (value.length < 3) {
@@ -100,48 +101,64 @@ export const CreateCommunity = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
-      <div>
-        <label htmlFor="name" className="block mb-2 font-medium"> Community Name </label>
-        <input
-          type="text"
-          id="name"
-          required
-          pattern="[a-zA-Z0-9_]+"
-          minLength={3}
-          maxLength={40}
-          onChange={handleNameChange}
-          value={name}
-          className="w-full border border-white/20 bg-transparent p-2 rounded"
-          placeholder="e.g. ReactDevelopers"
-        />
-        {nameError && <p className="text-red-500 text-sm mt-1">{nameError}</p>}
-        <div className="flex justify-between items-center mt-1">
-          <p className="text-gray-400 text-xs">Only letters, numbers, and underscores allowed</p>
-          <div className="text-right text-xs text-gray-400">
-            {name.length}/40
+    <div>
+      {!user && (
+        <div className="max-w-2xl mx-auto text-center text-gray-400 m-8 p-4 border border-white/20 rounded bg-white/10">
+          Log in to create your own community
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
+        <div>
+          <label htmlFor="name" className="block mb-2 font-medium">
+            {" "}
+            Community Name{" "}
+          </label>
+          <input
+            type="text"
+            id="name"
+            required
+            pattern="[a-zA-Z0-9_]+"
+            minLength={3}
+            maxLength={40}
+            onChange={handleNameChange}
+            value={name}
+            className="w-full border border-white/20 bg-transparent p-2 rounded"
+            placeholder="e.g. ReactDevelopers"
+          />
+          {nameError && (
+            <p className="text-red-500 text-sm mt-1">{nameError}</p>
+          )}
+          <div className="flex justify-between items-center mt-1">
+            <p className="text-gray-400 text-xs">
+              Only letters, numbers, and underscores allowed
+            </p>
+            <div className="text-right text-xs text-gray-400">
+              {name.length}/40
+            </div>
           </div>
         </div>
-      </div>
-      <div>
-        <label htmlFor="description" className="block mb-2 font-medium"> Description </label>
-        <textarea
-          id="description"
-          required
-          rows={3}
-          onChange={(e) => setDescription(e.target.value)}
-          value={description}
-          className="w-full text-gray-200 border border-white/20 bg-transparent p-2 rounded"
-        />
-      </div>
-      <button 
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
-      >
-        {isPending ? "Creating..." : "Create Community"}
-      </button>
-
-      {isError && <p className="text-red-500">Error Creating Community</p> }
-    </form>
+        <div>
+          <label htmlFor="description" className="block mb-2 font-medium">
+            {" "}
+            Description{" "}
+          </label>
+          <textarea
+            id="description"
+            required
+            rows={3}
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+            className="w-full text-gray-200 border border-white/20 bg-transparent p-2 rounded"
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
+        >
+          {isPending ? "Creating..." : "Create Community"}
+        </button>
+        {isError && <p className="text-red-500">Error Creating Community</p>}
+      </form>
+    </div>
   );
 };

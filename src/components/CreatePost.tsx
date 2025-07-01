@@ -109,87 +109,92 @@ export const CreatePost = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
-      {/* POST TITLE */}
-      <div>
-        <label htmlFor="title" className="block mb-2 font-medium">
-          Title
-        </label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          required
-          maxLength={50}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full border border-white/20 bg-transparent p-2 rounded"
-        />
-        <div className="text-right text-xs text-gray-400 mt-1">
-          {title.length}/50
+    <div>
+      {!user && (
+        <div className="max-w-2xl mx-auto text-center text-gray-400 m-8 p-4 border border-white/20 rounded bg-white/10">
+          Log in to create a post
         </div>
-      </div>
-      {/* POST CONTENT */}
-      <div>
-        <label htmlFor="content" className="block mb-2 font-medium">
-          Content
-        </label>
-        <textarea
-          id="content"
-          value={content}
-          required
-          rows={5}
-          onChange={(e) => setContent(e.target.value)}
-          className="w-full text-gray-200 border border-white/20 bg-transparent p-2 rounded"
-        />
-      </div>
-      {/* SELECT COMMUNITY */}
-      <div>
-        <label htmlFor="community" className="block mb-2 font-medium">
-          {" "}
-          Select Community{" "}
-        </label>
-        <select
-          id="community"
-          onChange={handleCommunityChange}
-          className="w-full border border-white/20 bg-transparent text-gray-200 p-2 rounded appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value={""} className="bg-gray-800 text-gray-200">
+      )}
+      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
+        {/* POST TITLE */}
+        <div>
+          <label htmlFor="title" className="block mb-2 font-medium">
+            Title
+          </label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            required
+            maxLength={50}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full border border-white/20 bg-transparent p-2 rounded"
+          />
+          <div className="text-right text-xs text-gray-400 mt-1">
+            {title.length}/50
+          </div>
+        </div>
+        {/* POST CONTENT */}
+        <div>
+          <label htmlFor="content" className="block mb-2 font-medium">
+            Content
+          </label>
+          <textarea
+            id="content"
+            value={content}
+            required
+            rows={5}
+            onChange={(e) => setContent(e.target.value)}
+            className="w-full text-gray-200 border border-white/20 bg-transparent p-2 rounded"
+          />
+        </div>
+        {/* SELECT COMMUNITY */}
+        <div>
+          <label htmlFor="community" className="block mb-2 font-medium">
             {" "}
-            -- Choose a Community --{" "}
-          </option>
-          {communities?.map((community, key) => (
-            <option
-              key={key}
-              value={community.id}
-              className="bg-gray-800 text-gray-200"
-            >
-              {community.name}
+            Select Community{" "}
+          </label>
+          <select
+            id="community"
+            onChange={handleCommunityChange}
+            className="w-full border border-white/20 bg-transparent text-gray-200 p-2 rounded appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value={""} className="bg-gray-800 text-gray-200">
+              {" "}
+              -- Choose a Community --{" "}
             </option>
-          ))}
-        </select>
-      </div>
-
-      {/* UPLOAD IMAGE */}
-      <div>
-        <label htmlFor="image" className="block mb-2 font-medium">
-          Upload Image
-        </label>
-        <input
-          type="file"
-          id="image"
-          accept="image/*"
-          onChange={handleFileChange}
-          className="w-full text-gray-200 border border-white/20 bg-transparent p-1 rounded file:mr-2 file:text-sm file:py-1 file:px-2 file:rounded file:border-0 file:bg-gray-100 file:text-black hover:file:bg-gray-300"
-        />
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
-      >
-        {isPending ? "Creating..." : "Create Post"}
-      </button>
-
-      {isError && <p className="text-red-500">Error creating post.</p>}
-    </form>
+            {communities?.map((community, key) => (
+              <option
+                key={key}
+                value={community.id}
+                className="bg-gray-800 text-gray-200"
+              >
+                {community.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        {/* UPLOAD IMAGE */}
+        <div>
+          <label htmlFor="image" className="block mb-2 font-medium">
+            Upload Image
+          </label>
+          <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="w-full text-gray-200 border border-white/20 bg-transparent p-1 rounded file:mr-2 file:text-sm file:py-1 file:px-2 file:rounded file:border-0 file:bg-gray-100 file:text-black hover:file:bg-gray-300"
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
+        >
+          {isPending ? "Creating..." : "Create Post"}
+        </button>
+        {isError && <p className="text-red-500">Error creating post.</p>}
+      </form>
+    </div>
   );
 };
