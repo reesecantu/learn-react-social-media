@@ -73,7 +73,20 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-3">
+            {user && (
+              <div className="flex items-center">
+                {user.user_metadata?.avatar_url ? (
+                  <img
+                    src={user.user_metadata.avatar_url}
+                    alt="User avatar"
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tl to-[#211F70] from-[#2E2BE3]" />
+                )}
+              </div>
+            )}
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
               className="text-gray-300 focus:outline-none"
