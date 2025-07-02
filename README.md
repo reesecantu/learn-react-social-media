@@ -47,6 +47,8 @@ A modern social media web application built with React, Vite, and Supabase. This
 
 ## Next Steps
 
+- edit/delete posts
+- lazy loading on post lists and comments
 - Search feature for posts and communities
 - User profiles with editable information
 - Support for multiple login options
