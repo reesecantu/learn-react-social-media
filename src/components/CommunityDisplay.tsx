@@ -33,7 +33,7 @@ export const CommunityDisplay = ({ communityName }: CommunityDisplayProps) => {
   });
 
   if (isLoading) {
-    return <div className="text-center py-4">Loading Communities</div>;
+    return <div className="text-center py-4">Loading Community Page...</div>;
   }
 
   if (error) {
